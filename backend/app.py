@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from models import db, Comidas, Bebidas, Tragos, Combos
 
@@ -11,7 +11,21 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
 @app.route("/")
 def home():
-    return "Night Club"
+    comidas = Comidas.query.all()
+    
+    info_comidas = []
+    info_de_comida = {
+        "id_comida" : 1,
+        "nombre" : "comida.nombre",
+        "descripcion" : "comida.descripcion",
+        "imagen" : "comida.imagen",
+        "precio" : 10
+    }
+    info_comidas.append(info_de_comida)
+    
+    
+    
+    return jsonify(info_comidas)
 
 
 if __name__ == '__main__':
