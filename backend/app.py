@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 @app.route("/")
 def home():
     comidas = Comidas.query.all()
-    
+    """
     info_comidas = []
     info_de_comida = {
         "id_comida" : 1,
@@ -22,10 +22,27 @@ def home():
         "precio" : 10
     }
     info_comidas.append(info_de_comida)
-    
-    
-    
-    return jsonify(info_comidas)
+    """
+    bebidas = Bebidas.query.all()
+    tragos = Tragos.query.all()
+    combos = Combos.query.all()
+    informacion_de_combos = []
+    for combo in combos:
+        info_combo = {
+            "id" : combo.id,
+            "nombre" : combo.nombre,
+            "descripcion" : combo.descripcion,
+            "imagen" : combo.imagen,
+            "precio" : combo.precio
+        }
+        informacion_de_combos.append(info_combo)
+    informacion_de_productos = {
+        "comidas" : comidas,
+        "bebidas" : bebidas,
+        "tragos" : tragos,
+        "combos" : informacion_de_combos
+    }
+    return jsonify(informacion_de_productos)
 
 
 if __name__ == '__main__':
