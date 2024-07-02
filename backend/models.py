@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Comidas(db.Model):
-    tablename = "comidas"
+    __tablename__ = "comidas"
     id = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(255), nullable = False)
     descripcion = db.Column(db.String(255), nullable = False)
@@ -11,7 +11,7 @@ class Comidas(db.Model):
     precio = db.Column(db.Integer, nullable = False)
 
 class Bebidas(db.Model):
-    tablename = "bebidas"
+    __tablename__ = "bebidas"
     id = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(255), nullable = False)
     descripcion = db.Column(db.String(255), nullable = False)
@@ -19,7 +19,7 @@ class Bebidas(db.Model):
     precio = db.Column(db.Integer, nullable = False)
 
 class Tragos(db.Model):
-    _tablename = "tragos"
+    __tablename__ = "tragos"
     id = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(255), nullable = False)
     descripcion = db.Column(db.String(255), nullable = False)
@@ -27,7 +27,7 @@ class Tragos(db.Model):
     precio = db.Column(db.Integer, nullable = False)
 
 class Combos(db.Model):
-    __tablename = "combos"
+    __tablename__ = "combos"
     id = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(255), nullable = False)
     descripcion = db.Column(db.String(255), nullable = False)
