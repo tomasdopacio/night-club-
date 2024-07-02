@@ -7,29 +7,22 @@ header{
     display: flex;
     height: 100px;
     background-color: rgb(27, 27, 27);
-    justify-content: space-between;
-    align-items: center;    
+    justify-content:center;
+    align-items: center;   
 }
 header .logo{
     margin: 0;
     padding: 25px 30px;
     font-weight: bold;
+    justify-content:space-between;
     color: blueviolet;
     font-size: 1.6em;
 }
 
+
 nav a{
     font-weight: 600;
     padding-right: 10px;
-}
-
-@media (max-width:700px){
-    header{
-        flex-direction: column;
-    }
-    nav{
-        padding: 10px 0px
-    }
 }
 
 .menu{
@@ -57,4 +50,16 @@ header a{
 
 header a:hover{
     color: blueviolet;
+}
+
+.categoria{
+    height: 150px;
+    justify-content: center;
+    width: 1000px;
+    margin: 0 auto;
+
+}
+.categoria li{
+    display: flex;
+    list-style-type: none;
 }
