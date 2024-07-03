@@ -3,9 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Night Club</title>
 </head>
 <body>
-    
+    <header>
+        <div class="menu">
+            <img src="img/logo.jpg" class="logo" alt="logo">
+        </div>
+        <nav>
+            <a href="#">Comidas</a>
+            <a href="#">Bebidas</a>
+            <a href="#">Combos</a>
+            <a href="#">Tragos</a>
+        </nav>
+    </header>
+    <div class="categoria">
+        <h2>Comidas</h2>
+        <ul>
+            <li>comida 1</li>
+            <li>comida 2</li>
+            <li>comida 3</li>
+        </ul>
+        <h2>Bebidas</h2>
+        <ul>
+            <li>comida 1</li>
+            <li>comida 2</li>
+            <li>comida 3</li>
+        </ul>
+        <h2>Tragos</h2>
+        <ul>
+            <li>comida 1</li>
+            <li>comida 2</li>
+            <li>comida 3</li>
+        </ul>
+        <h2>Combos</h2>
+        <ul>
+            <li>comida 1</li>
+            <li>comida 2</li>
+            <li>comida 3</li>
+        </ul>
+    </div>
+    <script>
+        function response_received(response) {
+            return response.json()
+        }
+
+        function parse_data(content) {
+            console.log(content)
+        }
+
+        function request_error(error) {
+            console.log("ERROR")
+            console.log(error);
+        }
+
+        fetch("http://localhost:5000/")
+            .then(response_received)
+            .then(parse_data)
+            .catch(request_error)
+    </script>
 </body>
 </html>
