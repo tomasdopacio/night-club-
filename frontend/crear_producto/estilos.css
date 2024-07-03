@@ -1,0 +1,51 @@
+
+body{
+    background-color:rgb(26, 26, 25);
+}
+
+h1{
+    text-align: center;
+    text-decoration-thickness:unset;
+    font-weight:800;
+    text-decoration-line:underline;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    color: blueviolet;
+    box-sizing: border-box;
+    margin: 1em;
+    border-color: aqua;
+}
+
+.container{
+   padding: 2em;
+}
+
+.form-label{
+    color: blueviolet;
+    font-weight: bolder;
+    font-size:x-large;
+    padding: 10px 2px;
+}
+
+.form-control{
+    border-radius:1em;
+    padding: 15px;
+}
+
+.btn-outline-success{
+    color: blueviolet;
+    border-color: blueviolet;
+    height: 50px;
+    width: 100px ;
+}
+
+.btn-outline-success:hover{
+    background-color: blueviolet;
+    border-color: blueviolet;
+}
+
+#fondo{
+    background-color:rgb(37, 37, 35);
+    border-style:solid;
+    border-radius:1em;
+}
+
