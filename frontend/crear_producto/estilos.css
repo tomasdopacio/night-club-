@@ -34,6 +34,7 @@ h1{
 .btn-outline-success{
     color: blueviolet;
     border-color: blueviolet;
+    border-radius: 10px;
     height: 50px;
     width: 100px ;
 }
