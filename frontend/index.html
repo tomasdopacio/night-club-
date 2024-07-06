@@ -25,120 +25,94 @@
         <section class="comida">
             <a name="1"></a>
             <h1>COMIDAS</h1>
-            <div class="producto">
-                <div class="contenido-producto">
-                    <h2 class="titulo-tarjeta">AMBER</h2>
-                    <p class="descripcion-tarjeta">Roja, combina maltas especiales con el perfil frutal del lúpulo americano. ABV 6%</p>
-                    <div class="precio-tarjeta">
-                        <span class="precio">Precio: $ 2.900,00</span>
-                    </div>
-                    <br>
-                    <button class="boton-editar"><a href="">Editar</a></button>
-                    <button class="boton-eliminar"><a href="">Eliminar</a></button>
-                </div>
-                <img src="https://via.placeholder.com/100" alt="Imagen de la cerveza" class="imagen-tarjeta">
-            </div>
-            <div class="producto">
-                <div class="contenido-producto">
-                    <h2 class="titulo-producto">AMBER</h2>
-                    <p class="descripcion-producto">Roja, combina maltas especiales con el perfil frutal del lúpulo americano. ABV 6%</p>
-                    <div class="precio-producto">
-                        <span class="precio">Precio: $ 2.900,00</span>
-                    </div>
-                    <br>
-                    <button class="boton-editar">Editar</button>
-                    <button class="boton-eliminar">Eliminar</button>
-                </div>
-                <img src="https://via.placeholder.com/100" alt="Imagen de la cerveza" class="imagen-producto">
-            </div>
+            <article class="producto">
+            </article>
         </section>
-        <section class="bebidas">
+        <section class="bebidas" name="2">
             <a name="2"></a>
             <h1>BEBIDAS</h1>
-            <div class="producto">
-                <div class="contenido-producto">
-                    <h2 class="titulo-producto">AMBER</h2>
-                    <p class="descripcion-producto">Roja, combina maltas especiales con el perfil frutal del lúpulo americano. ABV 6%</p>
-                    <div class="precio-producto">
-                        <span class="precio">Precio: $ 2.900,00</span>
-                    </div>
-                    <br>
-                    <button class="boton-editar"><a href="">Editar</a></button>
-                    <button class="boton-eliminar"><a href="">Eliminar</a></button>
-                </div>
-                <img src="https://via.placeholder.com/100" alt="Imagen de la cerveza" class="imagen-producto">
-            </div>
+            <article class="producto">
+            </article>
         </section>
         <section>
-            <a name="2"></a>
+            <a name="3"></a>
             <h1>TRAGOS</h1>
-            <div class="producto">
-                <div class="contenido-producto">
-                    <h2 class="titulo-producto">AMBER</h2>
-                    <p class="descripcion-producto">Roja, combina maltas especiales con el perfil frutal del lúpulo americano. ABV 6%</p>
-                    <div class="precio-producto">
-                        <span class="precio">Precio: $ 2.900,00</span>
-                    </div>
-                    <br>
-                    <button class="boton-editar"><a href="">Editar</a></button>
-                    <button class="boton-eliminar"><a href="">Eliminar</a></button>
-                </div>
-                <img src="https://via.placeholder.com/100" alt="Imagen de la cerveza" class="imagen-producto">
-            </div>
+            <article class="producto">
+            </article>
         </section>
         <section class="combos">
-            <a name="2"></a>
-            <h1>COMBOS</h1>
-            <div class="producto">
-                <div class="contenido-producto">
-                    <h2 class="titulo-producto">AMBER</h2>
-                    <p class="descripcion-producto">Roja, combina maltas especiales con el perfil frutal del lúpulo americano. ABV 6%</p>
-                    <div class="precio-producto">
-                        <span class="precio">Precio: $ 2.900,00</span>
-                    </div>
-                    <br>
-                    <button class="boton-editar"><a href="">Editar</a></button>
-                    <button class="boton-eliminar"><a href="">Eliminar</a></button>
-                </div>
-                <img src="https://via.placeholder.com/100" alt="Imagen de la cerveza" class="imagen-producto">
-            </div>
+            <a name="4"><h1>COMBOS</h1></a>
+            <article class="producto" id="">
+            </article>
         </section>
     </main>
     <script>
         function response_received(response) {
             return response.json()
         }
+        
+        function agregar_productos(productos,seccion){
+            if (!productos[0]) return "No hay productos para agregar";
+            
+            for (let index = 0; index < productos.length; index++) {
+                const articulo = document.createElement("article");
+                articulo.setAttribute("class","producto");
+                articulo.setAttribute("id",productos[index]["id"]);
+
+                const contenido_producto = createElement("div");
+                contenido_producto.setAttribute("class","contenido-producto");
+
+                const nombre = createElement("h2");
+                nombre.setAttribute("class","nombre-producto");
+                nombre.append(productos[index]["nombre"]);
+
+                const descripcion = createElement("p");
+                descripcion.setAttribute("class","descripcion-producto");
+                descripcion.append(productos[index]["descripcion"]);
+
+                const precio_producto = createElement("div");
+                precio_producto.setAttribute("class","descripcion-producto");
+
+                const precio = createElement("span");
+                precio.setAttribute("class","precio");
+                precio.append(productos[index]["precio"]);
+
+                precio_producto.append(precio)
+
+                const boton_editar = createElement("button");
+                boton_editar.setAttribute("class","boton-editar")
+
+                const boton_eliminar = createElement("button");
+                boton_eliminar.setAttribute("class","boton-eliminar");
+
+                contenido_producto.append(nombre);
+                contenido_producto.append(descripcion);
+                contenido_producto.append(precio_producto);
+                contenido_producto.append(boton_editar);
+                contenido_producto.append(boton_eliminar);
+
+                const imagen = createElement("img");
+                imagen.setAttribute("src",productos[index]["imagen"]);
+                imagen.setAttribute("class","imagen-producto");
+                imagen.setAttribute("alt",precio_producto[index]["nombre"]);
+
+                seccion.append(contenido_producto);
+                seccion.append(imagen);
+            }
+            return "Se agregaron productos";
+        }
 
         function parsear_datos(contenido) {
             const seccion_comida = document.getElementsByClassName("comida");
-            console.log(contenido["comida"][0]["id"])
-        //     const seccion_comida = document.getElementsByClassName("comida");
-        //     const seccion_bebida = document.getElementsByClassName("bebida");
-        //     const seccion_tragos = document.getElementsByClassName("tragos");
-        //     const seccion_combos = document.getElementsByClassName("combos");
-        //     for (let index = 0; index < contenido.length && seccion_comida == contenido.comida; index++){
-        //         const item = document.createElement("div");
-        //         item.setAttribute("class", "col-6 col-md-4 col-lg-3 col-xl-2");
-
-        //         const card = document.createElement("a");
-        //         card.setAttribute("class", "card text-decoration-none");
-        //         card.setAttribute("href", `/character?id=${contenido[index].id}`);
-
-        //         const image = document.createElement("img");
-        //         image.setAttribute("class", "card-img-top");
-        //         image.setAttribute("src", contenido[index].image)
-
-        //         const card_body = document.createElement("div");
-        //         card_body.setAttribute("class", "card-body");
-
-        //         card_body.append(contenido[index].name);
-        //         card.append(image);
-        //         card.append(card_body);
-        //         item.append(card);
-
-        //         container.append(item);
-        //     }
-        // }
+            const seccion_bebida = document.getElementsByClassName("bebida");
+            const seccion_tragos = document.getElementsByClassName("tragos");
+            const seccion_combos = document.getElementsByClassName("combos");
+            console.log(seccion_comida);
+            
+            console.log(agregar_productos(contenido["comidas"],seccion_comida));
+            console.log(agregar_productos(contenido["bebidas"],seccion_bebida));
+            console.log(agregar_productos(contenido["tragos"],seccion_tragos));
+            console.log(agregar_productos(contenido["combos"],seccion_combos));
         }
 
         function request_error(error) {
