@@ -27,15 +27,46 @@ def home():
                 "precio" : combo.precio
             }
             informacion_de_combos.append(info_combo)
+        informacion_de_comidas = []
+        for comida in comidas:
+            info_comida = {
+                "id" : comida.id,
+                "nombre" : comida.nombre,
+                "descripcion" : comida.descripcion,
+                "imagen" : comida.imagen,
+                "precio" : comida.precio
+            }
+            informacion_de_comidas.append(info_comida)
+        informacion_de_bebidas = []
+        for bebida in bebidas:
+            info_bebida = {
+                "id" : bebida.id,
+                "nombre" : bebida.nombre,
+                "descripcion" : bebida.descripcion,
+                "imagen" : bebida.imagen,
+                "precio" : bebida.precio
+            }
+            informacion_de_bebidas.append(info_bebida)
+        informacion_de_tragos = []
+        for trago in tragos:
+            info_trago = {
+                "id" : trago.id,
+                "nombre" : trago.nombre,
+                "descripcion" : trago.descripcion,
+                "imagen" : trago.imagen,
+                "precio" : trago.precio
+            }
+            informacion_de_tragos.append(info_trago)
+        
         informacion_de_productos = {
-            "comidas" : comidas,
-            "bebidas" : bebidas,
-            "tragos" : tragos,
+            "comidas" : informacion_de_comidas,
+            "bebidas" : informacion_de_bebidas,
+            "tragos" : informacion_de_tragos,
             "combos" : informacion_de_combos
         }
         return jsonify(informacion_de_productos)
     except:
-        return {"error" : "errorDeServidor"} , 500
+        return {"error" : "errorDeServidor0"} , 500
 
 @app.route("/crear/<producto>", methods = ["POST"])
 def crear_producto(producto):
@@ -51,8 +82,21 @@ def crear_producto(producto):
                 tipo_elemento = Tragos(nombre = data["nombre"], descripcion = data["descripcion"], imagen = data["imagen"], precio = ["precio"])
         db.session.add(tipo_elemento)
         db.session.commit()
+        return jsonify(tipo_elemento)
     except:
         return {"error" : "errorDeServidor"} , 500
+"""
+@app.route("modificar", methods = ["DELETE", "PUT", "GET"])
+def procesar_request():
+    tipo_contenido = request.headers.get('Content-Type')
+    if (tipo_contenido == 'application/json'):
+        request = request.json
+        if(request["modificacion"] == "borrar"):
+            if(request["tipo_elemento"] == "comida"):
+
+    else:
+        return 'Content-Type not supported!'
+"""    
 
 
 
