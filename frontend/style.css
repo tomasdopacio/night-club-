@@ -25,11 +25,15 @@ nav button{
     font-size: 1em;
     outline: none; /* Eliminar el borde de enfoque por defecto */
     transition: background-color 0.3s, color 0.3s;
+    margin-left:80px;
+    transform: 0,3s;
 
 }
 nav button:hover {
     background-color:blueviolet; /* Fondo rojo al pasar el ratón */
     color: #fff; /* Texto blanco al pasar el ratón */
+    transform: scale(1.08);
+
 }
 
 .menu{
@@ -41,6 +45,7 @@ nav button:hover {
     height: 80px;
     border-radius: 60%;
     margin: right 10px;
+    margin-right: 3cm;
 }
 
 header .container{
@@ -116,6 +121,7 @@ h1{
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 30px;
 }
 
 .precio {
@@ -131,20 +137,10 @@ h1{
     padding: 7px 12px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
-    outline: none; /* Eliminar el borde de enfoque por defecto */
+    text-decoration: none;
+    font-size: 1em; /* Eliminar el borde de enfoque por defecto */
     transition: background-color 0.3s, color 0.3s; /* Transición suave para cambios de color */
 }
-
-body section div button a{
-    outline: none;
-}
-
-.boton-editar:hover {
-    background-color:blueviolet; /* Fondo rojo al pasar el ratón */
-    color: #fff; /* Texto blanco al pasar el ratón */
-}
-
 .boton-eliminar {
     background-color: transparent; /* Fondo transparente */
     border: 2px solid red; /* Borde rojo */
@@ -153,15 +149,21 @@ body section div button a{
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
-    outline: none; /* Eliminar el borde de enfoque por defecto */
+    text-decoration: none;
+    margin-left: 20px;
     transition: background-color 0.3s, color 0.3s; /* Transición suave para cambios de color */
 }
+.boton-editar:hover {
+    background-color:blueviolet; /* Fondo rojo al pasar el ratón */
+        color: #fff; /* Texto blanco al pasar el ratón */
+    }
 
 .boton-eliminar:hover {
     background-color:red; /* Fondo rojo al pasar el ratón */
     color: #fff; /* Texto blanco al pasar el ratón */
 
 }
+
 .imagen-producto {
     width: 100px;
     height: 100px;
