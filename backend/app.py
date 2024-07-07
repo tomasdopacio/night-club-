@@ -72,31 +72,49 @@ def home():
 def crear_producto(producto):
     try:
         tipo_elemento = ""
+        
         if(producto == "producto"):
-            data = request.form
-            if(data["categoria"] == "comida"):
-                tipo_elemento = Comidas(nombre = data["nombre"], descripcion = data["descripcion"], imagen = data["imagen"], precio = ["precio"])
-            elif(data["categoria"] == "bebidas"):
-                tipo_elemento = Bebidas(nombre = data["nombre"], descripcion = data["descripcion"], imagen = data["imagen"], precio = ["precio"])
-            elif(data["categoria"] == "tragos"):
-                tipo_elemento = Tragos(nombre = data["nombre"], descripcion = data["descripcion"], imagen = data["imagen"], precio = ["precio"])
+            data_producto = request.form
+            if(data_producto["categoria"] == "comida"):
+                tipo_elemento = Comidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
+            elif(data_producto["categoria"] == "bebidas"):
+                tipo_elemento = Bebidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
+            elif(data_producto["categoria"] == "tragos"):
+                tipo_elemento = Tragos(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
+            elemento_creado = {
+                "nombre" : data_producto["nombre"],
+                "descripcion" : data_producto["descripcion"],
+                "imagen" : data_producto["imagen"],
+                "precio" : data_producto["precio"]
+            }
+        elif(producto == "combo"):
+            ...    
         db.session.add(tipo_elemento)
         db.session.commit()
-        return jsonify(tipo_elemento)
+        
+        return f"creado {jsonify(elemento_creado)}"
     except:
         return {"error" : "errorDeServidor"} , 500
 """
-@app.route("modificar", methods = ["DELETE", "PUT", "GET"])
+@app.route("/modificar", methods = ["DELETE", "PUT", "GET"])
 def procesar_request():
-    tipo_contenido = request.headers.get('Content-Type')
-    if (tipo_contenido == 'application/json'):
-        request = request.json
-        if(request["modificacion"] == "borrar"):
-            if(request["tipo_elemento"] == "comida"):
+    try:
+        if (request.method == "DELETE"):
+            argumentos = request.args.to_dict()
+            if(argumentos.get("tipo") == "comidas"):
+                elemento = Comidas.query.filter_by(id = argumentos.get("id")).delete()
+            elif(argumentos.get("tipo") == "bebidas"):
+                elemento = Bebidas.query.filter_by(id = argumentos.get("id")).delete()
+            elif(argumentos.get("tipo") == "tragos"):
+                elemento = Tragos.query.filter_by(id = argumentos.get("id")).delete()
+            elif(argumentos.get("tipo") == "combos"):
+                elemento = Combos.query.filter_by(id = argumentos.get("id")).delete()
+            db.session.commit()
+            return f"eliminado {jsonify(elemento)}"
+    except:
+       return {"error" : "errorDeServidorAlEliminarElemento"} , 500 
+"""   
 
-    else:
-        return 'Content-Type not supported!'
-"""    
 
 
 
