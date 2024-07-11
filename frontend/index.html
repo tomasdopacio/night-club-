@@ -20,42 +20,46 @@
             <button><a href="/crear_producto">CREAR PRODUCTO</a></button>
         </nav>
     </header>
-    
     <main>
         <section class="comida">
-            <a name="1"></a>
-            <h1>COMIDAS</h1>
+            <a name="1"><h1>COMIDAS</h1></a>
         </section>
         <section class="bebidas" name="2">
-            <a name="2"></a>
-            <h1>BEBIDAS</h1>
+            <a name="2"><h1>BEBIDAS</h1></a>
         </section>
         <section>
-            <a name="3"></a>
-            <h1>TRAGOS</h1>
+            <a name="3"><h1>TRAGOS</h1></a>
         </section>
         <section class="combos">
             <a name="4"><h1>COMBOS</h1></a>
-                <article id="2" class="producto">
-                    <div class="contenido-producto">
-                        <h2 class="titulo-producto">AMBER</h2>
-                        <p class="descripcion-producto">Roja, combina maltas especiales con el perfil frutal del lúpulo americano. ABV 6%</p>
-                        <div class="precio-producto">
-                            <span class="precio">Precio: $ 2.900,00</span>
-                        </div>
-                        <br>
-                        <button class="boton-editar">Editar</button>
-                        <button class="boton-eliminar" onclick="eliminar_producto()">Eliminar</button>
-                    </div>
-                    <img src="https://via.placeholder.com/100" alt="Imagen de la cerveza" class="imagen-producto">
-                </article>
         </section>
     </main>
     <script>
-        function response_received(response) {
-            return response.json()
+
+    function delete_response(data) {
+            if (data.success) {
+                alert("Se eliminó el producto");
+                window.location.href = "/";
+            } else {
+                alert("Se produjo un error, pruebe de nuevo");
+            }
         }
-        
+
+        function eliminar_producto(id, tabla) {
+            const confirmation = confirm("¿Estás seguro que queres eliminarlo?");
+            if (!confirmation) {
+                return;
+            }
+            fetch(`http://localhost:5000/modificar?tipo=${tabla}&id=${id}`, { method: "DELETE" })
+                .then((res) => res.json())
+                .then(delete_response)
+                .catch(request_error);
+        }
+
+        function response_received(response) {
+            return response.json();
+        }
+
         function agregar_productos(productos,seccion,tabla){
             if (!productos[0]) return "No hay productos para agregar";
             
@@ -91,7 +95,7 @@
 
                 const boton_eliminar = document.createElement("button");
                 boton_eliminar.setAttribute("class","boton-eliminar");
-                boton_eliminar.setAttribute("onclick",eliminar_producto(productos[index]["id"],tabla));
+                boton_eliminar.onclick = () => eliminar_producto(producto["id"], tabla);
                 boton_eliminar.innerText = "Eliminar";
 
                 contenido_producto.append(nombre);
