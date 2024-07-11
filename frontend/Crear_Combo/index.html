@@ -20,29 +20,31 @@
 
 <main>
   <div class="container" id="fondo">
-    <form id="productForm" onsubmit="subir_form(elemento)">
+    <form id="productForm" onsubmit="subir_form(event)">
       <div class="mb-3">
         <label for="nombre_comida" class="form-label">Nombre Combo</label>
         <input type="text" placeholder="Nombre del Producto" class="form-control" name="nombre" required id="name">
       </div>  
       <label for="Seleccion_producto" class="form-label">Seleccion de Productos</label>
       
-      <div name="Comidas" id="Com"> 
-        <select name="comidas" id="comidas">
-          <option selected>Comidas</option>
-        </select>
-      </div>
+      <div class="d-flex justify-content-between mb-3">
+        <div name="Comidas" id="Com" class="me-2"> 
+          <select name="comidas" id="comidas" class="form-select" required>
+            <option selected disabled value="">Comidas</option>
+          </select>
+        </div>
 
-      <div name="Bebidas" id="Beb"> 
-        <select name="bebidas" id="bebidas">
-          <option selected>Bebidas</option>
-        </select>
-      </div>
-      
-      <div name="Tragos" id="Trag"> 
-        <select name="tragos" id="tragos">
-          <option selected>Tragos</option>
-        </select>
+        <div name="Bebidas" id="Beb" class="me-2"> 
+          <select name="bebidas" id="bebidas" class="form-select" required>
+            <option selected disabled value="">Bebidas</option>
+          </select>
+        </div>
+        
+        <div name="Tragos" id="Trag"> 
+          <select name="tragos" id="tragos" class="form-select" required>
+            <option selected disabled value="">Tragos</option>
+          </select>
+        </div>
       </div>
       
       <div class="mb-3">
@@ -56,16 +58,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
-    fetch('http://localhost:5000/')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        alert('Combo creado exitosamente');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Hubo un error al crear el combo');
-    });
+  
 </script>
 </body>
 </html>
