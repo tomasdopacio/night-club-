@@ -110,25 +110,25 @@ def crear_producto(producto):
         return f"creado {jsonify(elemento_creado)}"
     except:
         return {"error" : "errorDeServidor"} , 500
-"""
+
 @app.route("/modificar", methods = ["DELETE", "PUT", "GET"])
 def procesar_request():
     try:
         if (request.method == "DELETE"):
             argumentos = request.args.to_dict()
             if(argumentos.get("tipo") == "comidas"):
-                elemento = Comidas.query.filter_by(id = argumentos.get("id")).delete()
+                Comidas.query.filter_by(id = argumentos.get("id")).delete()
             elif(argumentos.get("tipo") == "bebidas"):
-                elemento = Bebidas.query.filter_by(id = argumentos.get("id")).delete()
+                Bebidas.query.filter_by(id = argumentos.get("id")).delete()
             elif(argumentos.get("tipo") == "tragos"):
-                elemento = Tragos.query.filter_by(id = argumentos.get("id")).delete()
+                Tragos.query.filter_by(id = argumentos.get("id")).delete()
             elif(argumentos.get("tipo") == "combos"):
-                elemento = Combos.query.filter_by(id = argumentos.get("id")).delete()
+                Combos.query.filter_by(id = argumentos.get("id")).delete()
             db.session.commit()
-            return f"eliminado {jsonify(elemento)}"
+            return {"succes" : True}
     except:
        return {"error" : "errorDeServidorAlEliminarElemento"} , 500 
-"""   
+
 
 
 
