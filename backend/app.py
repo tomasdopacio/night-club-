@@ -8,6 +8,7 @@ port=5000
 app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://tp:tp@localhost:5432/tp1'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
+NO_SELECCIONADO = -1
 
 
 @app.route("/")
@@ -72,31 +73,63 @@ def home():
 def crear_producto(producto):
     try:
         tipo_elemento = ""
+        
         if(producto == "producto"):
-            data = request.form
-            if(data["categoria"] == "comida"):
-                tipo_elemento = Comidas(nombre = data["nombre"], descripcion = data["descripcion"], imagen = data["imagen"], precio = ["precio"])
-            elif(data["categoria"] == "bebidas"):
-                tipo_elemento = Bebidas(nombre = data["nombre"], descripcion = data["descripcion"], imagen = data["imagen"], precio = ["precio"])
-            elif(data["categoria"] == "tragos"):
-                tipo_elemento = Tragos(nombre = data["nombre"], descripcion = data["descripcion"], imagen = data["imagen"], precio = ["precio"])
+            data_producto = request.form
+            if(data_producto["categoria"] == "comida"):
+                tipo_elemento = Comidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
+            elif(data_producto["categoria"] == "bebidas"):
+                tipo_elemento = Bebidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
+            elif(data_producto["categoria"] == "tragos"):
+                tipo_elemento = Tragos(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
+            elemento_creado = {
+                "nombre" : data_producto["nombre"],
+                "descripcion" : data_producto["descripcion"],
+                "imagen" : data_producto["imagen"],
+                "precio" : data_producto["precio"]
+            }
+        elif(producto == "combo"):
+            data_combo = request.form
+            comida_seleccionada = Comidas.query.get(data_combo["comidas"])
+            bebida_seleccionada = Bebidas.query.get(data_combo["bebidas"])
+            trago_seleccionado = Tragos.query.get(data_combo["tragos"])
+            elemento_creado = {
+                "nombre" : data_combo["nombre"],
+                "descripcion" : comida_seleccionada.descripcion + ", " + bebida_seleccionada.descripcion + " y " + trago_seleccionado.descripcion,
+                "imagen" : data_combo["imagen"],
+                "precio" : comida_seleccionada.precio + bebida_seleccionada.precio + trago_seleccionado.precio,
+                "id_comida" : data_combo["comidas"],
+                "id_bebida" : data_combo["bebidas"],
+                "id_trago" : data_combo["tragos"]
+            }
+            tipo_elemento = Combos(nombre = elemento_creado["nombre"], descripcion = elemento_creado["descripcion"], imagen = elemento_creado["imagen"], precio = elemento_creado["precio"], id_comida = data_combo["comidas"], id_bebida = data_combo["bebidas"], id_tragos = data_combo["tragos"])
+        
         db.session.add(tipo_elemento)
         db.session.commit()
-        return jsonify(tipo_elemento)
+        
+        return f"creado {jsonify(elemento_creado)}"
     except:
         return {"error" : "errorDeServidor"} , 500
 """
-@app.route("modificar", methods = ["DELETE", "PUT", "GET"])
+@app.route("/modificar", methods = ["DELETE", "PUT", "GET"])
 def procesar_request():
-    tipo_contenido = request.headers.get('Content-Type')
-    if (tipo_contenido == 'application/json'):
-        request = request.json
-        if(request["modificacion"] == "borrar"):
-            if(request["tipo_elemento"] == "comida"):
+    try:
+        if (request.method == "DELETE"):
+            argumentos = request.args.to_dict()
+            if(argumentos.get("tipo") == "comidas"):
+                elemento = Comidas.query.filter_by(id = argumentos.get("id")).delete()
+            elif(argumentos.get("tipo") == "bebidas"):
+                elemento = Bebidas.query.filter_by(id = argumentos.get("id")).delete()
+            elif(argumentos.get("tipo") == "tragos"):
+                elemento = Tragos.query.filter_by(id = argumentos.get("id")).delete()
+            elif(argumentos.get("tipo") == "combos"):
+                elemento = Combos.query.filter_by(id = argumentos.get("id")).delete()
+            db.session.commit()
+            return f"eliminado {jsonify(elemento)}"
+    except:
+       return {"error" : "errorDeServidorAlEliminarElemento"} , 500 
+"""   
 
-    else:
-        return 'Content-Type not supported!'
-"""    
 
 
 
