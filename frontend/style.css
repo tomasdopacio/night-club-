@@ -10,19 +10,30 @@ header{
     justify-content:center;
     align-items: center;   
 }
-header .logo{
-    margin: 0;
-    padding: 25px 30px;
-    font-weight: bold;
-    justify-content:space-between;
-    color: blueviolet;
-    font-size: 1.6em;
-}
-
 
 nav a{
     font-weight: 600;
     padding-right: 10px;
+}
+nav button{
+    background-color: transparent; /* Fondo transparente */
+    border: transparent; /* Borde rojo */
+    color: blueviolet; /* Texto rojo */
+    padding: 7px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    outline: none; /* Eliminar el borde de enfoque por defecto */
+    transition: background-color 0.3s, color 0.3s;
+    margin-left:80px;
+    transform: 0,3s;
+
+}
+nav button:hover {
+    background-color:blueviolet; /* Fondo rojo al pasar el ratón */
+    color: #fff; /* Texto blanco al pasar el ratón */
+    transform: scale(1.08);
+
 }
 
 .menu{
@@ -34,6 +45,7 @@ nav a{
     height: 80px;
     border-radius: 60%;
     margin: right 10px;
+    margin-right: 3cm;
 }
 
 header .container{
@@ -49,7 +61,7 @@ header a{
 }
 
 header a:hover{
-    color: blueviolet;
+    color: white;
 }
 
 .categoria{
@@ -63,3 +75,101 @@ header a:hover{
     display: flex;
     list-style-type: none;
 }
+
+h1{
+    text-align: center;
+    padding: 20px;
+    height: 2em;
+    text-decoration-line: underline;
+}
+
+.producto {
+    background: #1f1e1e;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /*Sombra de fondo*/
+    display: flex;  /* Alinea los elementos hijos en una fila */
+    align-items: center;  /* Centra verticalmente los elementos */
+    padding: 20px;
+    gap: 20px;
+    max-width: 600px;
+    margin: auto;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.contenido-producto {
+    flex: 1; /* Permite que el contenido textual ocupe el espacio disponible */
+}
+.producto:hover{
+    transform:scale(1.05);
+}
+
+.titulo-producto {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0;
+    color:white;
+}
+
+.descripcion-producto {
+    font-size: 0.9em;
+    color: white;
+    margin: 10px 0;
+}
+
+.precio-producto {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.precio {
+    font-size: 1.2em;
+    color: beige;
+    font-weight: bold;
+}
+
+.boton-editar {
+    background-color: transparent; /* Fondo transparente */
+    border: 2px solid blueviolet; /* Borde rojo */
+    color: blueviolet; /* Texto rojo */
+    padding: 7px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1em; /* Eliminar el borde de enfoque por defecto */
+    transition: background-color 0.3s, color 0.3s; /* Transición suave para cambios de color */
+}
+.boton-eliminar {
+    background-color: transparent; /* Fondo transparente */
+    border: 2px solid red; /* Borde rojo */
+    color: red; /* Texto rojo */
+    padding: 7px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    text-decoration: none;
+    margin-left: 20px;
+    transition: background-color 0.3s, color 0.3s; /* Transición suave para cambios de color */
+}
+.boton-editar:hover {
+    background-color:blueviolet; /* Fondo rojo al pasar el ratón */
+        color: #fff; /* Texto blanco al pasar el ratón */
+    }
+
+.boton-eliminar:hover {
+    background-color:red; /* Fondo rojo al pasar el ratón */
+    color: #fff; /* Texto blanco al pasar el ratón */
+
+}
+
+.imagen-producto {
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* Asegura que la imagen cubra el contenedor sin distorsión */
+    border-radius: 10px;
+}
+li {
+    list-style-type: none;
+ }
