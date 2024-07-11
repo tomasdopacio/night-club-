@@ -107,7 +107,7 @@ def crear_producto(producto):
         db.session.add(tipo_elemento)
         db.session.commit()
         
-        return f"creado {jsonify(elemento_creado)}"
+        return {"creado" : elemento_creado}
     except:
         return {"error" : "errorDeServidor"} , 500
 
@@ -117,10 +117,16 @@ def procesar_request():
         if (request.method == "DELETE"):
             argumentos = request.args.to_dict()
             if(argumentos.get("tipo") == "comidas"):
+                if(Combos.query.filter_by(id_comida = argumentos.get("id")) != None):
+                    Combos.query.filter_by(id_comida = argumentos.get("id")).delete()
                 Comidas.query.filter_by(id = argumentos.get("id")).delete()
             elif(argumentos.get("tipo") == "bebidas"):
+                if(Combos.query.filter_by(id_bebida = argumentos.get("id")) != None):
+                    Combos.query.filter_by(id_bebida = argumentos.get("id")).delete()
                 Bebidas.query.filter_by(id = argumentos.get("id")).delete()
             elif(argumentos.get("tipo") == "tragos"):
+                if(Combos.query.filter_by(id_tragos = argumentos.get("id")) != None):
+                    Combos.query.filter_by(id_tragos = argumentos.get("id")).delete()
                 Tragos.query.filter_by(id = argumentos.get("id")).delete()
             elif(argumentos.get("tipo") == "combos"):
                 Combos.query.filter_by(id = argumentos.get("id")).delete()
