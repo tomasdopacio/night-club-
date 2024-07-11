@@ -117,13 +117,13 @@ def procesar_request():
         if (request.method == "DELETE"):
             argumentos = request.args.to_dict()
             if(argumentos.get("tipo") == "comidas"):
-                elemento = Comidas.query.filter_by(id = argumentos.get("id")).delete()
+                Comidas.query.filter_by(id = argumentos.get("id")).delete()
             elif(argumentos.get("tipo") == "bebidas"):
-                elemento = Bebidas.query.filter_by(id = argumentos.get("id")).delete()
+                Bebidas.query.filter_by(id = argumentos.get("id")).delete()
             elif(argumentos.get("tipo") == "tragos"):
-                elemento = Tragos.query.filter_by(id = argumentos.get("id")).delete()
+                Tragos.query.filter_by(id = argumentos.get("id")).delete()
             elif(argumentos.get("tipo") == "combos"):
-                elemento = Combos.query.filter_by(id = argumentos.get("id")).delete()
+                Combos.query.filter_by(id = argumentos.get("id")).delete()
             db.session.commit()
             return {"succes" : True}
     except:

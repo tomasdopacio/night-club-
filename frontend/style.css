@@ -11,6 +11,7 @@ header{
     align-items: center;   
 }
 
+
 nav a{
     font-weight: 600;
     padding-right: 10px;
@@ -82,7 +83,6 @@ h1{
     height: 2em;
     text-decoration-line: underline;
 }
-
 .producto {
     background: #1f1e1e;
     border-radius: 10px;
