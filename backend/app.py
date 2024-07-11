@@ -110,7 +110,7 @@ def crear_producto(producto):
         return f"creado {jsonify(elemento_creado)}"
     except:
         return {"error" : "errorDeServidor"} , 500
-"""
+
 @app.route("/modificar", methods = ["DELETE", "PUT", "GET"])
 def procesar_request():
     try:
@@ -125,10 +125,10 @@ def procesar_request():
             elif(argumentos.get("tipo") == "combos"):
                 elemento = Combos.query.filter_by(id = argumentos.get("id")).delete()
             db.session.commit()
-            return f"eliminado {jsonify(elemento)}"
+            return {"succes" : True}
     except:
        return {"error" : "errorDeServidorAlEliminarElemento"} , 500 
-"""   
+
 
 
 

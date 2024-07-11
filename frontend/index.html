@@ -27,7 +27,7 @@
         <section class="bebidas" name="2">
             <a name="2"><h1>BEBIDAS</h1></a>
         </section>
-        <section>
+        <section class="tragos">
             <a name="3"><h1>TRAGOS</h1></a>
         </section>
         <section class="combos">
@@ -37,7 +37,8 @@
     <script>
 
     function delete_response(data) {
-            if (data.success) {
+            if (data["succes"]) {
+                console.log("se elimino correctamente")
                 alert("Se eliminó el producto");
                 window.location.href = "/";
             } else {
@@ -46,14 +47,12 @@
         }
 
         function eliminar_producto(id, tabla) {
-            const confirmation = confirm("¿Estás seguro que queres eliminarlo?");
-            if (!confirmation) {
-                return;
-            }
+            
             fetch(`http://localhost:5000/modificar?tipo=${tabla}&id=${id}`, { method: "DELETE" })
-                .then((res) => res.json())
+                .then(response_received)
                 .then(delete_response)
                 .catch(request_error);
+                
         }
 
         function response_received(response) {
@@ -62,7 +61,6 @@
 
         function agregar_productos(productos,seccion,tabla){
             if (!productos[0]) return "No hay productos para agregar";
-            
             for (let index = 0; index < productos.length; index++) {
                 const articulo = document.createElement("article");
                 articulo.setAttribute("class","producto");
@@ -74,7 +72,7 @@
                 const nombre = document.createElement("h2");
                 nombre.setAttribute("class","nombre-producto");
                 nombre.append(productos[index]["nombre"]);
-
+                console.log(productos[index]["nombre"])
                 const descripcion = document.createElement("p");
                 descripcion.setAttribute("class","descripcion-producto");
                 descripcion.append(productos[index]["descripcion"]);
@@ -95,7 +93,7 @@
 
                 const boton_eliminar = document.createElement("button");
                 boton_eliminar.setAttribute("class","boton-eliminar");
-                boton_eliminar.onclick = () => eliminar_producto(producto["id"], tabla);
+                boton_eliminar.onclick = () => eliminar_producto(productos[index]["id"], tabla);
                 boton_eliminar.innerText = "Eliminar";
 
                 contenido_producto.append(nombre);
@@ -121,13 +119,13 @@
             console.log(contenido);
             const seccion_comida = document.getElementsByClassName("comida")[0];
             const seccion_bebida = document.getElementsByClassName("bebidas")[0];
-            const seccion_tragos = document.getElementsByClassName("tragos");
-            const seccion_combos = document.getElementsByClassName("combos");
+            const seccion_tragos = document.getElementsByClassName("tragos")[0];
+            const seccion_combos = document.getElementsByClassName("combos")[0];
             console.log(seccion_comida);            
-            console.log(agregar_productos(contenido["comidas"],seccion_comida),"comidas");
-            console.log(agregar_productos(contenido["bebidas"],seccion_bebida),"bebidas");
-            console.log(agregar_productos(contenido["tragos"],seccion_tragos),"tragos");
-            console.log(agregar_productos(contenido["combos"],seccion_combos),"combos");
+            console.log(agregar_productos(contenido["comidas"],seccion_comida,"comidas"),"comidas");
+            console.log(agregar_productos(contenido["bebidas"],seccion_bebida,"bebidas"),"bebidas");
+            console.log(agregar_productos(contenido["tragos"],seccion_tragos,"tragos"),"tragos");
+            console.log(agregar_productos(contenido["combos"],seccion_combos,"combos"),"combos");
         }
 
         function request_error(error) {
