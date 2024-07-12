@@ -13,7 +13,7 @@
 <br>
 <main>
   <div class="container" id="fondo">
-    <form id="productForm" onsubmit="subir_form(elemento)">
+    <form id="productForm" onsubmit="edit_produc(event)">
       <div class="mb-3">
         <label for="nombre_comida" class="form-label">Nombre Comida</label>
         <input type="text" placeholder="Nombre del Producto" class="form-control" name="nombre" required id="name">
@@ -63,7 +63,7 @@
   }
 
   
-  fetch("http://localhost:5000/modificar/?tipo={tabla}&id=${id}", 
+  fetch(`http://localhost:5000/modificar/?tipo=${tipo}&id=${id}`, 
   {
       method: 'GET'
   })
@@ -77,16 +77,16 @@
     });
   
 
-  function subir_form(event)
+  function edit_produc(event)
   {
     event.preventDefault();
 
     var form = document.getElementById('productForm');
     var datos_form = new FormData(form);
 
-    fetch('http://localhost:5000/crear/producto', 
+    fetch(`http://localhost:5000/modificar/?tipo=${tipo}&id=${id}`, 
     {
-        method: 'POST',
+        method: 'PUT',
         body: datos_form
     })
 
