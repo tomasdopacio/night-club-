@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 from models import db, Comidas, Bebidas, Tragos, Combos
 
@@ -9,7 +9,6 @@ app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql+psycopg2://tp:tp@localhost:54
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
 NO_SELECCIONADO = -1
-
 
 @app.route("/")
 def home():
@@ -68,44 +67,53 @@ def home():
         return jsonify(informacion_de_productos)
     except:
         return {"error" : "errorDeServidor0"} , 500
+    
+
+def crear_elemento(producto, formulario):
+    tipo_elemento = {}
+    if(producto == "producto"):
+        data_producto = formulario
+        if(data_producto["categoria"] == "comida"):
+            tipo_elemento = Comidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
+        elif(data_producto["categoria"] == "bebidas"):
+            tipo_elemento = Bebidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
+        elif(data_producto["categoria"] == "tragos"):
+            tipo_elemento = Tragos(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
+        elemento_creado = {
+            "nombre" : data_producto["nombre"],
+            "descripcion" : data_producto["descripcion"],
+            "imagen" : data_producto["imagen"],
+            "precio" : data_producto["precio"]
+        }
+    elif(producto == "combo"):
+        data_combo = formulario
+        comida_seleccionada = Comidas.query.get(data_combo["comidas"])
+        bebida_seleccionada = Bebidas.query.get(data_combo["bebidas"])
+        trago_seleccionado = Tragos.query.get(data_combo["tragos"])
+        elemento_creado = {
+            "nombre" : data_combo["nombre"],
+            "descripcion" : comida_seleccionada.descripcion + ", " + bebida_seleccionada.descripcion + " y " + trago_seleccionado.descripcion,
+            "imagen" : data_combo["imagen"],
+            "precio" : comida_seleccionada.precio + bebida_seleccionada.precio + trago_seleccionado.precio,
+            "id_comida" : data_combo["comidas"],
+            "id_bebida" : data_combo["bebidas"],
+            "id_trago" : data_combo["tragos"]
+        }
+        tipo_elemento = Combos(nombre = elemento_creado["nombre"], descripcion = elemento_creado["descripcion"], imagen = elemento_creado["imagen"], precio = elemento_creado["precio"], id_comida = data_combo["comidas"], id_bebida = data_combo["bebidas"], id_tragos = data_combo["tragos"])
+    
+    db.session.add(tipo_elemento)
+    db.session.commit()
+    return elemento_creado
 
 @app.route("/crear/<producto>", methods = ["POST"])
 def crear_producto(producto):
     try:
-        tipo_elemento = ""
-        
         if(producto == "producto"):
-            data_producto = request.form
-            if(data_producto["categoria"] == "comida"):
-                tipo_elemento = Comidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
-            elif(data_producto["categoria"] == "bebidas"):
-                tipo_elemento = Bebidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
-            elif(data_producto["categoria"] == "tragos"):
-                tipo_elemento = Tragos(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
-            elemento_creado = {
-                "nombre" : data_producto["nombre"],
-                "descripcion" : data_producto["descripcion"],
-                "imagen" : data_producto["imagen"],
-                "precio" : data_producto["precio"]
-            }
+            data_form = request.form
+            elemento_creado = crear_elemento(producto, data_form)
         elif(producto == "combo"):
-            data_combo = request.form
-            comida_seleccionada = Comidas.query.get(data_combo["comidas"])
-            bebida_seleccionada = Bebidas.query.get(data_combo["bebidas"])
-            trago_seleccionado = Tragos.query.get(data_combo["tragos"])
-            elemento_creado = {
-                "nombre" : data_combo["nombre"],
-                "descripcion" : comida_seleccionada.descripcion + ", " + bebida_seleccionada.descripcion + " y " + trago_seleccionado.descripcion,
-                "imagen" : data_combo["imagen"],
-                "precio" : comida_seleccionada.precio + bebida_seleccionada.precio + trago_seleccionado.precio,
-                "id_comida" : data_combo["comidas"],
-                "id_bebida" : data_combo["bebidas"],
-                "id_trago" : data_combo["tragos"]
-            }
-            tipo_elemento = Combos(nombre = elemento_creado["nombre"], descripcion = elemento_creado["descripcion"], imagen = elemento_creado["imagen"], precio = elemento_creado["precio"], id_comida = data_combo["comidas"], id_bebida = data_combo["bebidas"], id_tragos = data_combo["tragos"])
-        
-        db.session.add(tipo_elemento)
-        db.session.commit()
+            data_form = request.form
+            elemento_creado = crear_elemento(producto, data_form)
         
         return {"creado" : elemento_creado}
     except:
@@ -136,26 +144,60 @@ def elemento_a_devolver(elemento_buscado, es_combo):
         elemento_a_devolver["id_tragos"] = elemento_buscado.id_tragos
     return elemento_a_devolver
 
+def actualizar_producto(tipo_producto, id, formulario, coinciden_categorias):
+    if(coinciden_categorias):    
+        if(tipo_producto == "comidas"):
+            elemento_a_modificar = Comidas.query.get(id)
+            elemento_a_modificar.nombre = formulario["nombre"]
+            elemento_a_modificar.descripcion = formulario["descripcion"]
+            elemento_a_modificar.imagen = formulario["imagen"]
+            elemento_a_modificar.precio = formulario["precio"]
+        elif(tipo_producto == "bebidas"):
+            elemento_a_modificar = Bebidas.query.get(id)
+            elemento_a_modificar.nombre = formulario["nombre"]
+            elemento_a_modificar.descripcion = formulario["descripcion"]
+            elemento_a_modificar.imagen = formulario["imagen"]
+            elemento_a_modificar.precio = formulario["precio"]
+        elif(tipo_producto == "tragos"):
+            elemento_a_modificar = Tragos.query.get(id)
+            elemento_a_modificar.nombre = formulario["nombre"]
+            elemento_a_modificar.descripcion = formulario["descripcion"]
+            elemento_a_modificar.imagen = formulario["imagen"]
+            elemento_a_modificar.precio = formulario["precio"]
+        db.session.commit() 
+    else:
+        datos_para_eliminar = {
+            "tipo" : tipo_producto,
+            "id" : id
+        }
+        eliminar_producto(datos_para_eliminar)
+        crear_elemento("producto", formulario)
+
+
+def eliminar_producto(argumentos):
+    if(argumentos.get("tipo") == "comidas"):
+        if(Combos.query.filter_by(id_comida = argumentos.get("id")) != None):
+            Combos.query.filter_by(id_comida = argumentos.get("id")).delete()
+        Comidas.query.filter_by(id = argumentos.get("id")).delete()
+    elif(argumentos.get("tipo") == "bebidas"):
+        if(Combos.query.filter_by(id_bebida = argumentos.get("id")) != None):
+            Combos.query.filter_by(id_bebida = argumentos.get("id")).delete()
+        Bebidas.query.filter_by(id = argumentos.get("id")).delete()
+        print("borrado")
+    elif(argumentos.get("tipo") == "tragos"):
+        if(Combos.query.filter_by(id_tragos = argumentos.get("id")) != None):
+            Combos.query.filter_by(id_tragos = argumentos.get("id")).delete()
+        Tragos.query.filter_by(id = argumentos.get("id")).delete()
+    elif(argumentos.get("tipo") == "combos"):
+        Combos.query.filter_by(id = argumentos.get("id")).delete()
+    db.session.commit()
+
 @app.route("/modificar", methods = ["DELETE", "PUT", "GET"])
 def procesar_request():
     try:
         if (request.method == "DELETE"):
             argumentos = request.args.to_dict()
-            if(argumentos.get("tipo") == "comidas"):
-                if(Combos.query.filter_by(id_comida = argumentos.get("id")) != None):
-                    Combos.query.filter_by(id_comida = argumentos.get("id")).delete()
-                Comidas.query.filter_by(id = argumentos.get("id")).delete()
-            elif(argumentos.get("tipo") == "bebidas"):
-                if(Combos.query.filter_by(id_bebida = argumentos.get("id")) != None):
-                    Combos.query.filter_by(id_bebida = argumentos.get("id")).delete()
-                Bebidas.query.filter_by(id = argumentos.get("id")).delete()
-            elif(argumentos.get("tipo") == "tragos"):
-                if(Combos.query.filter_by(id_tragos = argumentos.get("id")) != None):
-                    Combos.query.filter_by(id_tragos = argumentos.get("id")).delete()
-                Tragos.query.filter_by(id = argumentos.get("id")).delete()
-            elif(argumentos.get("tipo") == "combos"):
-                Combos.query.filter_by(id = argumentos.get("id")).delete()
-            db.session.commit()
+            eliminar_producto(argumentos)
             return {"succes" : True}
     except:
        return {"error" : "errorDeServidorAlEliminarElemento"} , 500 
@@ -179,6 +221,18 @@ def procesar_request():
             return (elemento_para_devolver)
     except:
         return {"error" : "errorDeServidorAlDevolverElemento"} , 500
+    try:
+        if(request.method == "PUT"):
+            argumentos = request.args.to_dict()
+            data_form = request.form
+            print(data_form["categoria"] == argumentos["tipo"])
+            if(data_form["categoria"] == argumentos["tipo"]):
+                actualizar_producto(argumentos["tipo"], argumentos["id"], data_form, True)
+            else:
+                actualizar_producto(argumentos["tipo"], argumentos["id"], data_form, False)
+        return {"succes" : True}
+    except:
+        return {"error" : "errorAlActualizarLaBaseDeDatos"}, 500
     
 
 
