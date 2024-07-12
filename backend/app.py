@@ -110,6 +110,31 @@ def crear_producto(producto):
         return {"creado" : elemento_creado}
     except:
         return {"error" : "errorDeServidor"} , 500
+    
+def elemento_a_devolver(elemento_buscado, es_combo):
+    elemento_a_devolver = {
+        "id" : 0,
+        "nombre" : "",
+        "descripcion" : "",
+        "precio" : 0,
+        "imagen" : ""
+    }
+    if(not es_combo):    
+        elemento_a_devolver["id"] = elemento_buscado.id
+        elemento_a_devolver["nombre"] = elemento_buscado.nombre
+        elemento_a_devolver["descripcion"] = elemento_buscado.descripcion
+        elemento_a_devolver["precio"] = elemento_buscado.precio
+        elemento_a_devolver["imagen"] = elemento_buscado.imagen
+    else:
+        elemento_a_devolver["id"] = elemento_buscado.id
+        elemento_a_devolver["nombre"] = elemento_buscado.nombre
+        elemento_a_devolver["descripcion"] = elemento_buscado.descripcion
+        elemento_a_devolver["precio"] = elemento_buscado.precio
+        elemento_a_devolver["imagen"] = elemento_buscado.imagen
+        elemento_a_devolver["id_comida"] = elemento_buscado.id_comida
+        elemento_a_devolver["id_bebida"] = elemento_buscado.id_bebida
+        elemento_a_devolver["id_tragos"] = elemento_buscado.id_tragos
+    return elemento_a_devolver
 
 @app.route("/modificar", methods = ["DELETE", "PUT", "GET"])
 def procesar_request():
@@ -134,6 +159,27 @@ def procesar_request():
             return {"succes" : True}
     except:
        return {"error" : "errorDeServidorAlEliminarElemento"} , 500 
+    try:
+        if(request.method == "GET"):
+            argumentos = request.args.to_dict()
+            elemento_buscado = ""
+            elemento_para_devolver = {}
+            if(argumentos.get("tipo") == "comidas"):
+                elemento_buscado = Comidas.query.get(argumentos.get("id"))
+                elemento_para_devolver = elemento_a_devolver(elemento_buscado, False)
+            elif(argumentos.get("tipo") == "bebidas"):
+                elemento_buscado = Bebidas.query.get(argumentos.get("id"))
+                elemento_para_devolver = elemento_a_devolver(elemento_buscado, False)
+            elif(argumentos.get("tipo") == "tragos"):
+                elemento_buscado = Tragos.query.get(argumentos.get("id"))
+                elemento_para_devolver = elemento_a_devolver(elemento_buscado, False)
+            elif(argumentos.get("tipo") == "combos"):
+                elemento_buscado = Combos.query.get(argumentos.get("id"))
+                elemento_para_devolver = elemento_a_devolver(elemento_buscado, True)
+            return (elemento_para_devolver)
+    except:
+        return {"error" : "errorDeServidorAlDevolverElemento"} , 500
+    
 
 
 
