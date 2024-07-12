@@ -70,7 +70,7 @@ def home():
     
 
 def crear_elemento(producto, formulario):
-    tipo_elemento = ""
+    tipo_elemento = {}
     if(producto == "producto"):
         data_producto = formulario
         if(data_producto["categoria"] == "comida"):
@@ -170,7 +170,6 @@ def actualizar_producto(tipo_producto, id, formulario, coinciden_categorias):
             "tipo" : tipo_producto,
             "id" : id
         }
-        #print(tipo_producto, id)
         eliminar_producto(datos_para_eliminar)
         crear_elemento("producto", formulario)
 
@@ -184,6 +183,7 @@ def eliminar_producto(argumentos):
         if(Combos.query.filter_by(id_bebida = argumentos.get("id")) != None):
             Combos.query.filter_by(id_bebida = argumentos.get("id")).delete()
         Bebidas.query.filter_by(id = argumentos.get("id")).delete()
+        print("borrado")
     elif(argumentos.get("tipo") == "tragos"):
         if(Combos.query.filter_by(id_tragos = argumentos.get("id")) != None):
             Combos.query.filter_by(id_tragos = argumentos.get("id")).delete()
