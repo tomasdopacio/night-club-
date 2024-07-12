@@ -91,7 +91,7 @@
   {
     method:"GET"
   })
-    .then(response => response.json)
+    .then(response => response.json())
     .then(actualizarSelectores)
     .catch(error => 
     {
@@ -105,7 +105,7 @@
     var form = document.getElementById('productForm');
     var datos_form = new FormData(form);
 
-    fetch('http://localhost:5000/crear/producto', 
+    fetch('http://localhost:5000/crear/combo', 
     {
         method: 'POST',
         body: datos_form
