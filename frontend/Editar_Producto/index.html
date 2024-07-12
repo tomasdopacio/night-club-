@@ -13,7 +13,7 @@
 <br>
 <main>
   <div class="container" id="fondo">
-    <form id="productForm" onsubmit="subir_form(event)">
+    <form id="productForm" onsubmit="edit_produc(event)">
       <div class="mb-3">
         <label for="nombre_comida" class="form-label">Nombre Comida</label>
         <input type="text" placeholder="Nombre del Producto" class="form-control" name="nombre" required id="name">
@@ -46,15 +46,47 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
-function subir_form(event){
+  const parametros = new URLSearchParams(window.location.search);
+  const id_producto = parametros.get("id");
+  const producto = parametros.get("tipo");
+
+  if (id == null)
+    window.location.href = "/";
+  
+  function llenar_campos(campos)
+  {
+    document.getElementById("nombre").value = campos.nombre;
+    document.getElementById("categoria").value = campos.categoria;
+    document.getElementById("descripcion").value = campos.descripcion;
+    document.getElementById("precio").value = campos.precio;
+    document.getElementById("imagen").value = campos.imagen;
+  }
+
+  
+  fetch(`http://localhost:5000/modificar/?tipo=${tipo}&id=${id}`, 
+  {
+      method: 'GET'
+  })
+
+  .then(response => response.json())
+  .then(llenar_campos())
+  .catch(error => 
+    {
+        console.error('Error:', error);
+        alert('Hubo un error al crear el producto');
+    });
+  
+
+  function edit_produc(event)
+  {
     event.preventDefault();
 
     var form = document.getElementById('productForm');
     var datos_form = new FormData(form);
 
-    fetch('http://localhost:5000/crear/producto', 
+    fetch(`http://localhost:5000/modificar/?tipo=${tipo}&id=${id}`, 
     {
-        method: 'POST',
+        method: 'PUT',
         body: datos_form
     })
 
