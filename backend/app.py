@@ -170,6 +170,7 @@ def actualizar_producto(tipo_producto, id, formulario, coinciden_categorias):
             "tipo" : tipo_producto,
             "id" : id
         }
+        #print(tipo_producto, id)
         eliminar_producto(datos_para_eliminar)
         crear_elemento("producto", formulario)
 
@@ -224,7 +225,7 @@ def procesar_request():
         if(request.method == "PUT"):
             argumentos = request.args.to_dict()
             data_form = request.form
-            #print(data_form["categoria"] == argumentos["tipo"])
+            print(data_form["categoria"] == argumentos["tipo"])
             if(data_form["categoria"] == argumentos["tipo"]):
                 actualizar_producto(argumentos["tipo"], argumentos["id"], data_form, True)
             else:
