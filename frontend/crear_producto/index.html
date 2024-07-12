@@ -20,8 +20,8 @@
       </div>  
       <div class="mb-3">
         <label for="categoria" class="form-label">Categoria</label>
-        <select class="form-select" name="categoria" id="categoria">
-          <option selected>Categoria</option>
+        <select class="form-select" name="categoria"  id="categoria" required>
+          <option selected disabled value="">Categoria</option>
           <option value="comida">Comida</option>
           <option value="bebidas">Bebidas</option>
           <option value="tragos">Tragos</option>
@@ -29,25 +29,25 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Descripcion</label>
-        <input type="text" placeholder="Descripcion del Producto" class="form-control" name="descripcion" id="descripcion">
+        <input type="text" placeholder="Descripcion del Producto" class="form-control" name="descripcion" required id="descripcion">
       </div>
       <div class="mb-3">
         <label class="form-label">Precio</label>
-        <input type="number" placeholder="Introducir Precio" class="form-control" name="precio" id="precio">
+        <input type="number" placeholder="Introducir Precio" class="form-control" name="precio" required id="precio">
       </div>
       <div class="mb-3">
         <label class="form-label">Imagen</label>
-        <input type="file" class="form-control" name="imagen" id="imagen">
+        <input type="text" placeholder="Nombre de Imagen" class="form-control" name="imagen" required id="imagen">
       </div>
-      <button type="submit" class="btn btn-outline-success">Enviar</button>
+      <button type="submit"  class="btn btn-outline-success">Enviar</button>
     </form>
   </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
-function subir_form(elemento) {
-    elemento.preventDefault();
+function subir_form(event){
+    event.preventDefault();
 
     var form = document.getElementById('productForm');
     var datos_form = new FormData(form);
