@@ -59,7 +59,7 @@
             return response.json();
         }
 
-        function agregar_productos(productos,seccion,tabla){
+        function agregar_productos(productos,seccion,tabla,imagen_predeterminada){
             if (!productos[0]) return "No hay productos para agregar";
             for (let index = 0; index < productos.length; index++) {
                 const articulo = document.createElement("article");
@@ -107,7 +107,7 @@
 
                 imagen.setAttribute("class","imagen-producto");
                 imagen.setAttribute("alt",productos[index]["imagen"]);
-                
+                imagen.setAttribute('onerror', imagen_predeterminada);                
                 articulo.append(contenido_producto);
                 articulo.append(imagen);
                 seccion.append(articulo);
@@ -122,10 +122,10 @@
             const seccion_tragos = document.getElementsByClassName("tragos")[0];
             const seccion_combos = document.getElementsByClassName("combos")[0];
             console.log(seccion_comida);            
-            console.log(agregar_productos(contenido["comidas"],seccion_comida,"comidas"),"comidas");
-            console.log(agregar_productos(contenido["bebidas"],seccion_bebida,"bebidas"),"bebidas");
-            console.log(agregar_productos(contenido["tragos"],seccion_tragos,"tragos"),"tragos");
-            console.log(agregar_productos(contenido["combos"],seccion_combos,"combos"),"combos");
+            console.log(agregar_productos(contenido["comidas"],seccion_comida,"comidas","this.src='img/comida.png';"));
+            console.log(agregar_productos(contenido["bebidas"],seccion_bebida,"bebidas","this.src='img/bebidas.png';"));
+            console.log(agregar_productos(contenido["tragos"],seccion_tragos,"tragos","this.src='img/trago.png';"));
+            console.log(agregar_productos(contenido["combos"],seccion_combos,"combos","this.src='img/combos.png';"));
         }
 
         function request_error(error) {
