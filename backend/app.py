@@ -144,9 +144,35 @@ def elemento_a_devolver(elemento_buscado, es_combo):
         elemento_a_devolver["id_tragos"] = elemento_buscado.id_tragos
     return elemento_a_devolver
 
-def actualizar_producto(tipo_producto, id):
-    if(tipo_producto == "comidas"):
-        elemento_a_modificar = Comidas.query.get(id)
+def actualizar_producto(tipo_producto, id, formulario, coinciden_categorias):
+    if(coinciden_categorias):    
+        if(tipo_producto == "comidas"):
+            elemento_a_modificar = Comidas.query.get(id)
+            elemento_a_modificar.nombre = formulario["nombre"]
+            elemento_a_modificar.descripcion = formulario["descripcion"]
+            elemento_a_modificar.imagen = formulario["imagen"]
+            elemento_a_modificar.precio = formulario["precio"]
+        elif(tipo_producto == "bebidas"):
+            elemento_a_modificar = Bebidas.query.get(id)
+            elemento_a_modificar.nombre = formulario["nombre"]
+            elemento_a_modificar.descripcion = formulario["descripcion"]
+            elemento_a_modificar.imagen = formulario["imagen"]
+            elemento_a_modificar.precio = formulario["precio"]
+        elif(tipo_producto == "tragos"):
+            elemento_a_modificar = Tragos.query.get(id)
+            elemento_a_modificar.nombre = formulario["nombre"]
+            elemento_a_modificar.descripcion = formulario["descripcion"]
+            elemento_a_modificar.imagen = formulario["imagen"]
+            elemento_a_modificar.precio = formulario["precio"]
+        db.session.commit() 
+    else:
+        datos_para_eliminar = {
+            "tipo" : tipo_producto,
+            "id" : id
+        }
+        eliminar_producto(datos_para_eliminar)
+        crear_elemento("producto", formulario)
+
 
 def eliminar_producto(argumentos):
     if(argumentos.get("tipo") == "comidas"):
@@ -198,9 +224,12 @@ def procesar_request():
         if(request.method == "PUT"):
             argumentos = request.args.to_dict()
             data_form = request.form
+            #print(data_form["categoria"] == argumentos["tipo"])
             if(data_form["categoria"] == argumentos["tipo"]):
-                ...
-
+                actualizar_producto(argumentos["tipo"], argumentos["id"], data_form, True)
+            else:
+                actualizar_producto(argumentos["tipo"], argumentos["id"], data_form, False)
+        return {"succes" : True}
     except:
         return {"error" : "errorAlActualizarLaBaseDeDatos"}, 500
     
