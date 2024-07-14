@@ -89,9 +89,12 @@
                 precio_producto.append(precio)
 
                 const boton_editar = document.createElement("a");
-                boton_editar.setAttribute("class","boton-editar");
-                boton_editar.setAttribute("href",`Editar_Producto?id=${productos[index]["id"]}&tabla=${tabla}`);
-                boton_editar.innerText = "Editar";
+                
+                if(tabla != "combos"){
+                    boton_editar.setAttribute("class","boton-editar");
+                    boton_editar.setAttribute("href",`Editar_Producto?id=${productos[index]["id"]}&tabla=${tabla}`);
+                    boton_editar.innerText = "Editar";
+                }
                 
                 const boton_eliminar = document.createElement("button");
                 boton_eliminar.setAttribute("class","boton-eliminar");

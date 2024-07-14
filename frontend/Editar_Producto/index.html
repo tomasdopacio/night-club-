@@ -15,7 +15,7 @@
   <div class="container" id="fondo">
     <form id="productForm" onsubmit="edit_produc(event)">
       <div class="mb-3">
-        <label for="nombre_comida" class="form-label">Nombre Comida</label>
+        <label for="nombre_comida" class="form-label">Nombre del Producto</label>
         <input type="text" placeholder="Nombre del Producto" class="form-control" name="nombre" required id="name">
       </div>  
       <div class="mb-3">
@@ -76,7 +76,7 @@
   .catch(error => 
     {
         console.error('Error:', error);
-        alert('Hubo un error al crear el producto');
+        alert('Hubo un error al obtener la informacion del producto');
     });
   
 
@@ -97,14 +97,14 @@
     .then(data => 
     {
         console.log(data);
-        alert('Producto creado exitosamente');
+        alert('Producto editado exitosamente');
         window.location.href = "/";
     })
 
     .catch(error => 
     {
         console.error('Error:', error);
-        alert('Hubo un error al crear el producto');
+        alert('Hubo un error al editar el producto');
     });
 }
 </script>
