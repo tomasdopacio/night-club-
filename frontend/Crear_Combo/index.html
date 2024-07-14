@@ -9,11 +9,9 @@
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-<h1>Creacion de Combo</h1>
-<br>
-
-<main>
-  <div class="container" id="fondo">
+  <h1>Crear Combo</h1>
+  <main>
+    <div class="container" id="fondo">
     <form id="productForm" onsubmit="subir_form(event)">
       <div class="mb-3">
         <label for="nombre_comida" class="form-label">Nombre Combo</label>
@@ -96,7 +94,7 @@
     .catch(error => 
     {
         console.error('Error:', error);
-        alert('Hubo un error al crear el producto');
+        alert('Hubo un error al obtener informacion del Combo');
     });
 
   function subir_form(event){
@@ -115,14 +113,14 @@
     .then(data => 
     {
         console.log(data);
-        alert('Producto creado exitosamente');
+        alert('Combo creado exitosamente');
         window.location.href = "/";
     })
 
     .catch(error => 
     {
         console.error('Error:', error);
-        alert('Hubo un error al crear el producto');
+        alert('Hubo un error al crear el Combo');
     });
 }
 
