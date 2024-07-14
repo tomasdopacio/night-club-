@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify, redirect
-from flask_cors import CORS
+from flask import Flask, request, jsonify, redirect, Response
+from flask_cors import CORS, cross_origin
 from models import db, Comidas, Bebidas, Tragos, Combos
 
 app = Flask(__name__)
@@ -73,7 +73,7 @@ def crear_elemento(producto, formulario):
     tipo_elemento = {}
     if(producto == "producto"):
         data_producto = formulario
-        if(data_producto["categoria"] == "comida"):
+        if(data_producto["categoria"] == "comidas"):
             tipo_elemento = Comidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
         elif(data_producto["categoria"] == "bebidas"):
             tipo_elemento = Bebidas(nombre = data_producto["nombre"], descripcion = data_producto["descripcion"], imagen = data_producto["imagen"], precio = data_producto["precio"])
@@ -144,6 +144,25 @@ def elemento_a_devolver(elemento_buscado, es_combo):
         elemento_a_devolver["id_tragos"] = elemento_buscado.id_tragos
     return elemento_a_devolver
 
+def actualizar_combo(combos_seleccionado, producto_modificado, tipo_producto):
+    combos = combos_seleccionado.all()
+    for combo in combos:
+        if(tipo_producto == "comidas"):
+            bebida = Bebidas.query.get(combo.id_bebida)
+            trago = Tragos.query.get(combo.id_tragos)
+            combo.descripcion = producto_modificado.descripcion + ", " + bebida.descripcion + " y " + trago.descripcion
+            combo.precio = int(producto_modificado.precio) + int(bebida.precio) + int(trago.precio)
+        elif(tipo_producto == "bebidas"):
+            comida = Comidas.query.get(combo.id_comida)
+            trago = Tragos.query.get(combo.id_tragos)
+            combo.descripcion = comida.descripcion + ", " + producto_modificado.descripcion + " y " + trago.descripcion
+            combo.precio = int(producto_modificado.precio) + int(comida.precio) + int(trago.precio)
+        elif(tipo_producto == "tragos"):
+            bebida = Bebidas.query.get(combo.id_bebida)
+            comida = Comidas.query.get(combo.id_comida)
+            combo.descripcion = comida.descripcion + ", " + bebida.descripcion + " y " + producto_modificado.descripcion
+            combo.precio = int(producto_modificado.precio) + int(bebida.precio) + int(comida.precio)
+
 def actualizar_producto(tipo_producto, id, formulario, coinciden_categorias):
     if(coinciden_categorias):    
         if(tipo_producto == "comidas"):
@@ -152,19 +171,25 @@ def actualizar_producto(tipo_producto, id, formulario, coinciden_categorias):
             elemento_a_modificar.descripcion = formulario["descripcion"]
             elemento_a_modificar.imagen = formulario["imagen"]
             elemento_a_modificar.precio = formulario["precio"]
+            actualizar_combo(Combos.query.filter_by(id_comida = id), elemento_a_modificar, "comidas")
         elif(tipo_producto == "bebidas"):
             elemento_a_modificar = Bebidas.query.get(id)
             elemento_a_modificar.nombre = formulario["nombre"]
             elemento_a_modificar.descripcion = formulario["descripcion"]
             elemento_a_modificar.imagen = formulario["imagen"]
             elemento_a_modificar.precio = formulario["precio"]
+            
+            actualizar_combo(Combos.query.filter_by(id_bebida = id), elemento_a_modificar, "bebidas")
         elif(tipo_producto == "tragos"):
             elemento_a_modificar = Tragos.query.get(id)
             elemento_a_modificar.nombre = formulario["nombre"]
             elemento_a_modificar.descripcion = formulario["descripcion"]
             elemento_a_modificar.imagen = formulario["imagen"]
+            
             elemento_a_modificar.precio = formulario["precio"]
-        db.session.commit() 
+            actualizar_combo(Combos.query.filter_by(id_tragos = id), elemento_a_modificar, "tragos")
+        db.session.commit()
+        
     else:
         datos_para_eliminar = {
             "tipo" : tipo_producto,
@@ -173,6 +198,10 @@ def actualizar_producto(tipo_producto, id, formulario, coinciden_categorias):
         eliminar_producto(datos_para_eliminar)
         crear_elemento("producto", formulario)
 
+# @app.before_request
+# def basic_authentication():
+#     if request.method.lower() == 'options':
+#         return Response()
 
 def eliminar_producto(argumentos):
     if(argumentos.get("tipo") == "comidas"):
@@ -192,7 +221,7 @@ def eliminar_producto(argumentos):
         Combos.query.filter_by(id = argumentos.get("id")).delete()
     db.session.commit()
 
-@app.route("/modificar", methods = ["DELETE", "PUT", "GET"])
+@app.route("/modificar", methods = ["DELETE", "PUT", "GET", "OPTIONS"])
 def procesar_request():
     try:
         if (request.method == "DELETE"):
@@ -218,7 +247,7 @@ def procesar_request():
             elif(argumentos.get("tipo") == "combos"):
                 elemento_buscado = Combos.query.get(argumentos.get("id"))
                 elemento_para_devolver = elemento_a_devolver(elemento_buscado, True)
-            return (elemento_para_devolver)
+            return jsonify(elemento_para_devolver)
     except:
         return {"error" : "errorDeServidorAlDevolverElemento"} , 500
     try:

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-<h1>Creacion de Producto</h1>
+<h1>Editar Producto</h1>
 <br>
 <main>
   <div class="container" id="fondo">
@@ -22,7 +22,8 @@
         <label for="categoria" class="form-label">Categoria</label>
         <select class="form-select" name="categoria"  id="categoria" required>
           <option selected disabled value="">Categoria</option>
-          <option value="comida">Comida</option>
+          <!-- cambio comidas aca -->
+          <option value="comidas">Comida</option>
           <option value="bebidas">Bebidas</option>
           <option value="tragos">Tragos</option>
         </select>
@@ -48,14 +49,16 @@
 <script>
   const parametros = new URLSearchParams(window.location.search);
   const id_producto = parametros.get("id");
-  const producto = parametros.get("tipo");
+  const producto = parametros.get("tabla");
+  console.log(id_producto , producto)
 
-  if (id == null)
+  if (id_producto == null)
     window.location.href = "/";
   
   function llenar_campos(campos)
   {
-    document.getElementById("nombre").value = campos.nombre;
+    
+    document.getElementById("name").value = campos["nombre"];
     document.getElementById("categoria").value = campos.categoria;
     document.getElementById("descripcion").value = campos.descripcion;
     document.getElementById("precio").value = campos.precio;
@@ -63,13 +66,13 @@
   }
 
   
-  fetch(`http://localhost:5000/modificar/?tipo=${tipo}&id=${id}`, 
+  fetch(`http://localhost:5000/modificar?tipo=${producto}&id=${id_producto}`, 
   {
       method: 'GET'
   })
 
   .then(response => response.json())
-  .then(llenar_campos())
+  .then(llenar_campos)
   .catch(error => 
     {
         console.error('Error:', error);
@@ -84,7 +87,7 @@
     var form = document.getElementById('productForm');
     var datos_form = new FormData(form);
 
-    fetch(`http://localhost:5000/modificar/?tipo=${tipo}&id=${id}`, 
+    fetch(`http://localhost:5000/modificar?tipo=${producto}&id=${id_producto}`, 
     {
         method: 'PUT',
         body: datos_form
